@@ -1,10 +1,13 @@
-#include <stdint.h>
+#include <stdio.h>
 
 float a;
 float b;
 float c;
+float result;
 
 int main() {
+    // int numberCounter = scanf("%f %f %f", &a, &b, &c); = 3
+
     printf("Gib eine Zahl ein: \n");
     scanf("%f", &a);
 
@@ -14,7 +17,7 @@ int main() {
     printf("Gib eine Zahl ein: \n");    
     scanf("%f", &c);
 
-    float result = ((float)a + (float)b + (float)c) / 3;
+    result = ((float)a + (float)b + (float)c) / 3;
 
-    printf("Der Mitelwert der drei Zahlen %.2f %s %.2f %s %.2f %s %.2f \n", a, " + ", b, " + ", c, " = ", result);
+    printf("Der Mitelwert der drei Zahlen %.2f + %.2f + %.2f = %.2f \n", a, b, c, result);
 }
