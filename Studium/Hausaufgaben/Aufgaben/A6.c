@@ -13,5 +13,16 @@ int main() {
     }
     
     // Level 2
+    // 13 | 5 | 15 | 7 | 21 | ? ? ? ? ? ? | 247
+    printf("Arithmetische Rechenoperationen\n");
+
+    int iStartWert = 13;
+    int wertMinu;
+    while (iStartWert <= 247) {
+        printf("%d", iStartWert);
+        int wertMinu = iStartWert - 8;
+        iStartWert = wertMinu * 3;
+        printf(" - 8 = %d * 3 = %d\n", wertMinu, iStartWert);
+    }
     
 }
