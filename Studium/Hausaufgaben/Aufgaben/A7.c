@@ -9,29 +9,25 @@ double resistor_from_user = 0.0;
 
 void printE12SeriesOnConsole();
 void getResistorFromUser();
-void findBestSingleResistor();
-void findBestTwoResistorsInParallel();
+void checkBestOption(float ausEinem, float ausZwei);
 
-int main() {
-    // Aufgabenteil 1, berechnung der Wiederstandsreihe E12
-    /*
-    printf("Wiederstand %d hat einen Wert von %.2f Ohm \n", wiederstandsNr, wiederstand);
-    wiederstandsNr++;
-    while (wiederstand <= 1000)
-    {
-        wiederstand = wiederstand*wBF;
-        printf("Wiederstand %d hat einen Wert von %.2f Ohm \n", wiederstandsNr, wiederstand);
-        wiederstandsNr++;
-    }
-    */ 
+float findBestTwoResistorsInParallel();
+float findBestSingleResistor();
 
-    // Aufgabenteil 2,     
+int main() {   
     printE12SeriesOnConsole();
-    findBestSingleResistor();
+    getResistorFromUser();
 
-    // Aufgabe 4
-    calculateTwoResistorsInParallel(12.5, 20.5);
-    findBestTwoResistorsInParallel();
+    float besterAusEinem = findBestSingleResistor();
+    printf("\nDie beste Differenz vom Benutzerwert %.2f Ohm zum E12-Widerstand ist  %.2f%%.\n\n", resistor_from_user, ( besterAusEinem / resistor_from_user) * 100);
+
+    // Berechnung der Parallelschaltung
+    float besterAusZwei = findBestTwoResistorsInParallel();
+    printf("\nDer Beste Wiederstand der Parallelschaltung ist %.2f Ohm", besterAusZwei);
+
+    checkBestOption(besterAusEinem, besterAusZwei);
+
+    return 0;
 }
 
 float calculateE12Resistor(int NR) {
@@ -42,8 +38,7 @@ float calculateE12Resistor(int NR) {
 void printE12SeriesOnConsole() {
     printf("Wiederstand %d hat einen Wert von %.2f Ohm \n", wiederstandsNr, wiederstand);
     wiederstandsNr++;
-    while (wiederstand < 1000)
-    {
+    while (wiederstand < 1000) {
         printf("Wiederstand %d hat einen Wert von %.2f Ohm \n", wiederstandsNr, calculateE12Resistor(wiederstandsNr));  
         wiederstandsNr++; 
     }
@@ -54,8 +49,7 @@ void getResistorFromUser () {
     scanf("%lf", &resistor_from_user);
 }
 
-void findBestSingleResistor() {
-    getResistorFromUser();
+float findBestSingleResistor() {
     printf("Vergleiche den Wert %.2f mit den Werten von E12\n", resistor_from_user);
 
     wiederstand = 1.0;
@@ -73,19 +67,40 @@ void findBestSingleResistor() {
             }
             bestResistor = calculateE12Resistor(++wiederstandsNr);
         }
-
-    printf("Der beste E12-Widerstand fr %.2f Ohm ist Widerstand %d mit einem Unterschied von %.2f%%.\n", resistor_from_user, closestResistorNumber, (closestDifference / resistor_from_user) * 100);
+    return closestDifference;
 }
 
 // Parallelschaltung
 float calculateTwoResistorsInParallel(float wiederstand1, float wiederstand2) {
     // Berechnung eines Paralellschaltkreises mit 2 Wiederst„nden
+    // Rges = R1 * R2 / R2 + R1
+    float gesamtWiederstand = (wiederstand2 * wiederstand1) / (wiederstand2 + wiederstand1);
+    return gesamtWiederstand;
 }
 
-void findBestTwoResistorsInParallel() {
-    for (int i=0; i<100;i++) {
-        for (int a=0; a<10;a++) {
-            printf("i=%d a=%d",i,a);
+float findBestTwoResistorsInParallel() {
+    float bestResistance = -1;  // Initialisierung mit einem Wert auáerhalb des gltigen Bereichs
+    float bestR1;
+    float bestR2;
+    for (float r1 = 1.0; r1 <= 100.0; r1 += 1.0) {
+        for (float r2 = 1.0; r2 <= 100.0; r2 += 1.0) {
+            float parallelResistance = calculateTwoResistorsInParallel(r1, r2);
+            if (bestResistance == -1 || fabs(resistor_from_user - parallelResistance) < fabs(resistor_from_user - bestResistance)) {
+                bestResistance = parallelResistance;
+                bestR1 = r1;
+                bestR2 = r2;
+                printf("R1: %6.2f Ohm    R2: %6.2f Ohm    Rges = %6.2f Ohm    Usereingabe: %.2f Ohm \n", bestR1, bestR2, bestResistance, resistor_from_user);
+            }
         }
     }
-}   
+    return bestResistance;
+}
+
+void checkBestOption(float ausEinem, float ausZwei) {
+    if (resistor_from_user == ausEinem)
+    {
+        printf("Die Wahl einer Einzelschaltung ist besser!");
+    } else if (resistor_from_user == ausZwei) {
+        printf("Die Wahl einer Parallelschaltung ist besser!");
+    }
+}
