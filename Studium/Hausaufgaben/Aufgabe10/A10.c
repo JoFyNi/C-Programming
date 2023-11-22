@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
-int istVokal(char zeichen);
-int istKonsonanten(char zeichen);
+int isVokal(char zeichen);
+void removeCharacter(char *str, const char *charactersToRemove);
+int huffmann(char string1, char string2);
 
 /*
     Aufgabe 10
@@ -31,7 +33,7 @@ int main() {
         length = strlen(eingabe);   // strlen zaehlt die laenge des Strings eingabe
 
         printf("Laenge des Strings = %d\n", --length);
-    } while (length<20);     
+    } while (length>50);     
 
     printf("Ihre Eingabe: %s[%d Zeichen]\n", eingabe, length);
     
@@ -63,41 +65,71 @@ int main() {
     int vokalZaehler = 0;
     // ZÑhlen Sie die Vokale in der Eingabe
     for (int i = 0; eingabe[i] != '\0'; i++) {
-        if (istVokal(eingabe[i])) {
+        if (isVokal(eingabe[i])) {
             vokalZaehler++;
         }
     }
     printf("Die Anzahl der Vokale im Text ist: %d\n", vokalZaehler);
 
-    // Nur die Vokale ausgeben
-    /*
-        in Progress
-    */
 
+    char konsonanten[max];
+    strcpy(konsonanten, eingabe);
+    int konstonantenZaehler = length-vokalZaehler;
+    const char charactersToRemove[] = {'a', 'e', 'i', 'o', 'u'};
+    removeCharacter(konsonanten, charactersToRemove);
 
-    int konstonantenZaehler = 0;
-    // nur die konsonanten ausgeben
-    /*
-        in Progress
-    */
-
-
+    printf("Die Eingabe der Konsonanten lautet: %s", konsonanten);
+    printf("Die Laenge des Strings betraegt nun: %d", konstonantenZaehler);
+    
+    
+    
     // kompressionsrate berechnen und ausgeben
-    /*
-        in Progress
-    */
-
-
+    printf("Die Kompressionsrate betrÑgt: 1:%.2f", huffmann(eingabe, konsonanten));
+    
     return 0;
 }
 
 
-int istVokal(char zeichen) {
+int isVokal(char zeichen) {
     // öberprÅfen, ob das Zeichen ein Vokal ist (nur Kleinbuchstaben)
     return (zeichen == 'a' || zeichen == 'e' || zeichen == 'i' || zeichen == 'o' || zeichen == 'u');
 }
 
-int istKonsonanten(char zeichen) {
-    // öberprÅfen, ob das Zeichen ein Vokal ist (nur Kleinbuchstaben)
-    return (zeichen == 'b' || zeichen == 'c' || zeichen == 'd' || zeichen == 'f' || zeichen == 'g' || zeichen == 'h' || zeichen == 'j' || zeichen == 'k' || zeichen == 'l'); // bis Z
+void removeCharacter(char *str, const char *charactersToRemove) {
+    int i, j;
+    int len = strlen(str);
+    int removeLen = strlen(charactersToRemove);
+
+    // wenn ein vokal gefunden wird, wird es mit "" ueberschrieben
+    for (i = 0, j = 0; i < len; i++) {
+        int isToRemove = 0;
+        for (int k = 0; k < removeLen; k++) {
+            if (str[i] == charactersToRemove[k]) {
+                isToRemove = 1;
+                break;
+            }
+        }
+
+        if (!isToRemove) {
+            str[j] = str[i];
+            j++;
+        }
+    }
+
+    // FÅge das Null-Zeichen am Ende des verbleibenden Textes hinzu
+    str[j] = '\0';
+}
+
+int huffmann(char string1, char string2) {
+    // Huffman Codierung
+    char gesamtString[];
+    strcat(gesamtString, string1);
+    strcat(gesamtString, string2);
+    
+    /*
+        Gesamtstring in Symbole umwandeln
+        String in Bloecken der laenge 32 speichern
+        jeden block in einen Integer umwandeln
+    */
+
 }
