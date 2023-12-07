@@ -44,7 +44,7 @@ int main() {
     for (int j=length; j!=-1; j--) {    // faengt bei max length an und schreibt den char an die erste Position des Strings umkehrEingabe(T)
         umkehrEingabe[T] = eingabe[j];
         printf("%s", umkehrEingabe);
-        T++;                            // 
+        T++;
     }
 
     printf("\nErgebis: ");
@@ -72,17 +72,18 @@ int main() {
     printf("Die Anzahl der Vokale im Text ist: %d\n", vokalZaehler);
 
 
+    // Nur die Konsonanten ausgeben
     char konsonanten[max];
     strcpy(konsonanten, eingabe);
-    int konstonantenZaehler = length-vokalZaehler;
     const char charactersToRemove[] = {'a', 'e', 'i', 'o', 'u'};
+    // const char charactersToRemove[] = ("aeiou"); haette als alternative auch funktioniert 
     removeCharacter(konsonanten, charactersToRemove);
 
     printf("Die Eingabe der Konsonanten lautet: %s", konsonanten);
-    printf("Die Laenge des Strings betraegt nun: %d", konstonantenZaehler);
+    printf("Die Laenge des Strings betraegt nun: %d", length-vokalZaehler);
     
     
-    
+    // --- bearbeitung wird verschoben bis ich Informatik lerne ---
     // kompressionsrate berechnen und ausgeben
     printf("Die Kompressionsrate betr„gt: 1:%.2f", huffmann(eingabe, konsonanten));
     
