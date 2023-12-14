@@ -3,54 +3,46 @@
 #include <string.h>
 
 
-int numberOfElements = 5;
-
-
 
 // Programm zur analyse der ersten 5 Worte eines Satzes
 int main () {
-    int Array[5];
     char inputString[50];
-    char* a;
 
     // Einlesen eines Satzes als Zeichenkette und ablage in einer gegeigeneten Datenstruktur
     // Die ersten 5 Worte ermitteln und jedes Wort in einem Wortspeicher ablegen
     // char *variable mit 5 Elementen anlegen und mit calloc 20 Zeichen reservieren 
 
-    a = (char*)calloc(numberOfElements, sizeof(int));
     printf("Enter a String [max 50 chars]:\n");
-    scanf("%s",&inputString);
-    //fgets(inputString, 50, stdin);
+    fgets(inputString, sizeof(inputString), stdin);
+    int length = strlen(inputString);
 
-    int wordCount = 0;
-    int wordIndex = 0;
 
-    // Schleife durch den Eingabe-String
-    for (int i = 0; inputString[i] != '\0'; i++) {
-        wordCount++;
-        // Wenn ein Leerzeichen gefunden wird, beende das aktuelle Wort und beginne ein neues
-        if (inputString[i] == ' ' || inputString[i] == '\t' || inputString[i] == '\n') {
-            for (int i = 0; i < wordCount; i++)
-            {
-                a[wordIndex] +  inputString[i];
-            }
-            wordIndex++;
-            wordCount = 0;
-            // Wenn die maximale Anzahl von W”rtern erreicht ist, breche die Schleife ab
-            if (wordCount >= 20) {
-                break;
-            }
-        }
+
+    char *wortSpeicher[5];
+    for (int i = 0; i < 5; ++i) {
+        wortSpeicher[i] = (char *)calloc(20, sizeof(char)); // Speicher fr mindestens 20 Zeichen
     }
 
-    // Ausgabe der gespeicherten Worte
-    printf("Gespeicherte Worte:\n");
-    for (int i = 0; i < numberOfElements; i++) {
-        printf("%s\n", a[i]);
+    // Ermitteln der ersten 5 Worte
+    char *token = strtok(inputString, " "); // Leerzeichen zwischen den Worten 
+    int wortIndex = 0;
+    while (token != NULL && wortIndex < 5) { // mache weiter solange ein Wieteres Zeichen gefunden wird
+        strcpy(wortSpeicher[wortIndex], token); // kopiert das Wort in den Speicher
+        token = strtok(NULL, " "); 
+        wortIndex++; 
     }
-    free( a );
+
+    // Ausgabe der Worte
+    printf("Die ersten 5 Worte sind:\n");
+    for (int i = 0; i < wortIndex; ++i) {
+        printf("%s\n", wortSpeicher[i]);
+    }
+
+    // Freigabe des allokierten Speichers
+    for (int i = 0; i < 5; ++i) {
+        free(wortSpeicher[i]);
+    }
 
     return 0;
-
 }
 
